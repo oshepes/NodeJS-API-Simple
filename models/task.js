@@ -6,12 +6,8 @@
 var mongoose = require('mongoose');
 
 var taskSchema = mongoose.Schema({
-    id: {
-        type: Number
-    },
     project: {
-        type: Number,
-        require: true
+        type: String
     },
     name: {
         type: String, 

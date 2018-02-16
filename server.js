@@ -28,7 +28,6 @@ var session      = require('express-session');
 var MongoStore   = require('connect-mongostore')(session);
 var fs           = require('fs');
 var port         = 8080;
-var server;
 var http        = require('http');
 
 
@@ -42,10 +41,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 
-mongoose.createConnection(config.MONGODB_HOST);
-console.log("Connecting to %s", config.MONGODB_HOST);
-
 mongoose.connect(config.MONGODB_HOST, function(e) {
+    console.log("Connecting to %s", config.MONGODB_HOST);
     if(e) throw e;
     app.use(session({
         secret: config.SESSION_SECRET,

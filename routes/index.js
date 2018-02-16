@@ -146,8 +146,8 @@ module.exports = function (app, passport) {
     app.post('/users', function (req, res) {
         var User = require('../models/user');
         var newUser             = new User();
-        newUser.local.name      = req.params.name;
-        newUser.local.email     = req.params.email;
+        newUser.local.name      = req.body.name;
+        newUser.local.email     = req.body.email;
         newUser.local.password  = newUser.generateHash(req.params.password);
 
         // save the user
@@ -191,9 +191,8 @@ module.exports = function (app, passport) {
     
     /* projects - add/create */
     app.post('/projects', function (req, res) {
-        var Project = require('../models/project');
-        var newProject      = new Project();
-        newProject.name     = req.params.name;
+        var Project     = require('../models/project');
+        var newProject  = new Project({title: req.body.title});
 
         // save the project
         newProject.save(function(err) {
@@ -205,13 +204,12 @@ module.exports = function (app, passport) {
     /* projects - update */
     app.put('/projects', function (req, res) {
         var Project = require('../models/project');
-        var newProject      = new Project();
-        newProject.name     = req.params.name;
-
-        // save the project
-        newProject.save(function(err) {
-            if (err) throw err;
-            return res.jsonp({data: newProject});
+        Project.findOne({title: req.body.title}, function(err, doc){
+            doc.title = req.body.new_title;
+            doc.save(function(err) {
+                if (err) throw err;
+                return res.jsonp({data: doc});
+            });
         });
     });
 
@@ -239,17 +237,18 @@ module.exports = function (app, passport) {
                 res.jsonp({data: result});
         });
     });
-    
+
     /* tasks - add */
     app.post('/tasks', function (req, res) {
-        var Task = require('../models/task');
-        var newTask         = new Task();
-        newTask.name        = req.params.name;
-        newTask.project     = req.params.project;
-        newTask.summary     = req.params.summary;
-        newTask.due_date    = req.params.due_date;
-        newTask.description = req.params.description;
-        newTask.priority    = req.params.priority;
+        var Task    = require('../models/task');
+        var newTask = new Task({
+            name: req.body.name,
+            project: req.body.project,
+            summary: req.body.summary,
+            due_date: req.body.due_date,
+            description: req.body.description,
+            priority: req.body.priority
+        });
 
         // save the task
         newTask.save(function(err) {
@@ -261,18 +260,18 @@ module.exports = function (app, passport) {
     /* tasks - update */
     app.put('/tasks', function (req, res) {
         var Task = require('../models/task');
-        var newTask         = new Task();
-        newTask.name        = req.params.name;
-        newTask.project     = req.params.project;
-        newTask.summary     = req.params.summary;
-        newTask.due_date    = req.params.due_date;
-        newTask.description = req.params.description;
-        newTask.priority    = req.params.priority;
+        Task.findOne({name: req.body.name}, function(err, doc){
+            doc.project     = req.body.project;
+            doc.summary     = req.body.summary;
+            doc.due_date    = req.body.due_date;
+            doc.description = req.body.description;
+            doc.priority    = req.body.priority;
 
-        // save the task
-        newTask.save(function(err) {
-            if (err) throw err;
-            return res.jsonp({data: newTask});
+            // save the task
+            doc.save(function(err) {
+                if (err) throw err;
+                return res.jsonp({data: doc});
+            });
         });
     });
 
@@ -283,7 +282,7 @@ module.exports = function (app, passport) {
         newTask.name     = req.params.name;
 
         // save the task
-        newTask.findByIdAndRemove(function(err) {
+        newTask.findByIdAndRemove({name: req.body.name}, function(err) {
             if (err) throw err;
             return res.jsonp({data: newTask});
         });

@@ -6,11 +6,8 @@
 var mongoose = require('mongoose');
 
 var projectSchema = mongoose.Schema({
-    id: {
-        type: Number
-    },
-    name: {
-        type: String, 
+    title: {
+        type: String,
         unique: true
     },
     status: {
