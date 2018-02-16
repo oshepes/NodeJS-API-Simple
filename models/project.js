@@ -7,8 +7,7 @@ var mongoose = require('mongoose');
 
 var projectSchema = mongoose.Schema({
     id: {
-        type: Number, 
-        unique: true
+        type: Number
     },
     name: {
         type: String, 

@@ -144,7 +144,7 @@ module.exports = function (app, passport) {
     
     /* users - add/create */
     app.post('/users', function (req, res) {
-        var Model = require('../models/user');
+        var User = require('../models/user');
         var newUser             = new User();
         newUser.local.name      = req.params.name;
         newUser.local.email     = req.params.email;
@@ -168,6 +168,15 @@ module.exports = function (app, passport) {
         });
     });
 
+    /* users - delete */
+    app.delete('/users', function (req, res) {
+        var Model = require('../models/user');
+
+        Model.remove({
+            email : req.body.email
+        });
+    });
+
     /* projects - get */
     app.get('/projects', function (req, res) {
         var Model = require('../models/project');
@@ -182,7 +191,7 @@ module.exports = function (app, passport) {
     
     /* projects - add/create */
     app.post('/projects', function (req, res) {
-        var Model = require('../models/project');
+        var Project = require('../models/project');
         var newProject      = new Project();
         newProject.name     = req.params.name;
 
@@ -195,7 +204,7 @@ module.exports = function (app, passport) {
 
     /* projects - update */
     app.put('/projects', function (req, res) {
-        var Model = require('../models/project');
+        var Project = require('../models/project');
         var newProject      = new Project();
         newProject.name     = req.params.name;
 
@@ -206,9 +215,34 @@ module.exports = function (app, passport) {
         });
     });
 
-    /* tasks - add */
-    app.put('/tasks', function (req, res) {
+    /* projects - delete */
+    app.delete('/projects', function (req, res) {
+        var Project = require('../models/project');
+        var newProject      = new Project();
+        newProject.name     = req.params.name;
+
+        // save the project
+        newProject.remove(function(err) {
+            if (err) throw err;
+            return res.jsonp({data: newProject});
+        });
+    });
+
+    /* tasks - get */
+    app.get('/tasks', function (req, res) {
         var Model = require('../models/task');
+        var limit = req.params.limit || 1000;
+
+        Model.find()
+            .limit(parseInt(limit))
+            .exec(function (err, result) {
+                res.jsonp({data: result});
+        });
+    });
+    
+    /* tasks - add */
+    app.post('/tasks', function (req, res) {
+        var Task = require('../models/task');
         var newTask         = new Task();
         newTask.name        = req.params.name;
         newTask.project     = req.params.project;
@@ -226,7 +260,7 @@ module.exports = function (app, passport) {
 
     /* tasks - update */
     app.put('/tasks', function (req, res) {
-        var Model = require('../models/task');
+        var Task = require('../models/task');
         var newTask         = new Task();
         newTask.name        = req.params.name;
         newTask.project     = req.params.project;
@@ -242,16 +276,16 @@ module.exports = function (app, passport) {
         });
     });
 
-    /* tasks - add */
-    app.put('/tasks', function (req, res) {
-        var Model = require('../models/task');
-        var newProject      = new Task();
-        newProject.name     = req.params.name;
+    /* tasks - delete */
+    app.delete('/tasks', function (req, res) {
+        var Task = require('../models/task');
+        var newTask      = new Task();
+        newTask.name     = req.params.name;
 
-        // save the project
-        newProject.save(function(err) {
+        // save the task
+        newTask.findByIdAndRemove(function(err) {
             if (err) throw err;
-            return res.jsonp({data: newProject});
+            return res.jsonp({data: newTask});
         });
     });
 
