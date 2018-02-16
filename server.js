@@ -32,10 +32,6 @@ var server;
 var http        = require('http');
 
 
-// mongo
-mongoose.connect(config.MONGODB_HOST);
-console.log("Connecting to %s", config.MONGODB_HOST);
-
 // app config 
 app.use(cors());
 app.use(morgan('dev'));
@@ -46,22 +42,27 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 
-/* app config */
-app.use(session({
-    secret: config.SESSION_SECRET,
-    key: 'user', 
-    cookie: { maxAge: 86400000, secure: false },
-    resave: true, 
-    saveUninitialized: true,
-    store: new MongoStore({
-        "db": configDB.MONGODB_DB,
-        "collection": configDB.MONGODB_SESSION,
-        "auto_reconnect": true,
-        "options" : {
-            "autoReconnect" : true,
-        }
-    })
-}));
+mongoose.createConnection(config.MONGODB_HOST);
+console.log("Connecting to %s", config.MONGODB_HOST);
+
+mongoose.connect(config.MONGODB_HOST, function(e) {
+    if(e) throw e;
+    app.use(session({
+        secret: config.SESSION_SECRET,
+        key: 'user', 
+        cookie: { maxAge: 86400000, secure: false },
+        resave: true, 
+        saveUninitialized: true,
+        store: new MongoStore({
+            "db": configDB.MONGODB_DB,
+            "collection": configDB.MONGODB_SESSION,
+            "auto_reconnect": true,
+            "options" : {
+                "autoReconnect" : true,
+            }
+        })
+    }));
+});
 
 /* passport init */
 app.use(passport.initialize());

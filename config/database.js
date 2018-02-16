@@ -1,6 +1,6 @@
 module.exports = {
     db: {
-        "MONGODB_HOST": "mongodb://localhost/maverick",
+        "MONGODB_HOST": "mongodb://127.0.0.1/maverick",
         "MONGODB_DB": "maverick",
         "MONGODB_SESSION": "sessions",
         "QUERY_LIMIT": 1000,

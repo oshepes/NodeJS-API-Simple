@@ -5,7 +5,7 @@ module.exports = {
         "MAVERICK_DOMAIN": "maverick-api.com",
         "SITE": "maverick", 
         // "MONGODB_HOST": "mongodb://dbUser:maverick{$123#@localhost/maverick",
-        "MONGODB_HOST": "mongodb://localhost/maverick",
+        "MONGODB_HOST": "mongodb://127.0.0.1/maverick",
         "MAVERICK_PORT": 8080,
         "SESSION_SECRET": "0Ad7@3p$t5!t",
         "MAVERICK_SSL_CA_CERT": "my-root-ca.crt.pem",

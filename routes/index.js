@@ -171,6 +171,7 @@ module.exports = function (app, passport) {
     /* projects - get */
     app.get('/projects', function (req, res) {
         var Model = require('../models/project');
+        var limit = req.params.limit || 1000;
 
         Model.find()
             .limit(parseInt(limit))
