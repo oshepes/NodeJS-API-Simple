@@ -7,25 +7,30 @@ var mongoose = require('mongoose');
 
 var taskSchema = mongoose.Schema({
     id: {
-        type: Number, 
-        unique: true
+        type: Number
     },
     project: {
         type: Number,
-        require: true;
+        require: true
     },
     name: {
         type: String, 
         unique: true
     },
     status: {
-        type: Number, 
+        type: Number,
         default: 1    
     },
     created: { 
         type: Date, 
         default: Date.now 
     },
+    description: {
+        type: String
+    },
+    priority: {
+        type: Number
+    }
 }, {collection: "tasks"});
 
 module.exports = mongoose.model('Task', taskSchema);
