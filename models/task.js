@@ -6,6 +6,9 @@
 var mongoose = require('mongoose');
 
 var taskSchema = mongoose.Schema({
+    userid: {
+        type: String
+    },
     project: {
         type: String
     },
@@ -21,11 +24,17 @@ var taskSchema = mongoose.Schema({
         type: Date, 
         default: Date.now 
     },
+    summary: {
+        type: String
+    },
     description: {
         type: String
     },
     priority: {
         type: Number
+    },
+    due_date: {
+        type: String
     }
 }, {collection: "tasks"});
 

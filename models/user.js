@@ -8,6 +8,8 @@ var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt-nodejs');
 
 var userSchema = mongoose.Schema({
+    first_name: {type: String},
+    last_name: {type: String},
     level: {type: Number, default: 1},
     status: {type: Number, default: 1},
     local            : {

@@ -207,7 +207,7 @@ module.exports = function (app, passport) {
         Project.findOne({title: req.body.title}, function(err, doc){
             doc.title = req.body.new_title;
             doc.save(function(err) {
-                if (err) throw err;
+                if (err) return res.jsonp({error: err});
                 return res.jsonp({data: doc});
             });
         });
@@ -221,7 +221,7 @@ module.exports = function (app, passport) {
 
         // save the project
         newProject.remove(function(err) {
-            if (err) throw err;
+            if(err) return res.jsonp({error: err});
             return res.jsonp({data: newProject});
         });
     });
@@ -232,6 +232,54 @@ module.exports = function (app, passport) {
         var limit = req.params.limit || 1000;
 
         Model.find()
+            .limit(parseInt(limit))
+            .exec(function (err, result) {
+                res.jsonp({data: result});
+        });
+    });
+
+    /* tasks - get by userid */
+    app.post('/tasks/user', function (req, res) {
+        var Model = require('../models/task');
+        var limit = req.params.limit || 1000;
+
+        Model.find({user_id: req.body.userid})
+            .limit(parseInt(limit))
+            .exec(function (err, result) {
+                res.jsonp({data: result});
+        });
+    });
+
+    /* tasks - get by due date */
+    app.post('/tasks/date', function (req, res) {
+        var Model = require('../models/task');
+        var limit = req.params.limit || 1000;
+
+        Model.find({due_date: req.body.date})
+            .limit(parseInt(limit))
+            .exec(function (err, result) {
+                res.jsonp({data: result});
+        });
+    });
+
+    /* tasks - get by priority */
+    app.post('/tasks/priority', function (req, res) {
+        var Model = require('../models/task');
+        var limit = req.params.limit || 1000;
+
+        Model.find({priority: req.body.priority})
+            .limit(parseInt(limit))
+            .exec(function (err, result) {
+                res.jsonp({data: result});
+        });
+    });
+
+    /* tasks - get by due date */
+    app.post('/tasks/task', function (req, res) {
+        var Model = require('../models/task');
+        var limit = req.params.limit || 1000;
+
+        Model.find({name: req.body.task_name})
             .limit(parseInt(limit))
             .exec(function (err, result) {
                 res.jsonp({data: result});
